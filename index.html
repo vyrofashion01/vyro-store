@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101010">
+<title>VYRO — Fashion Store</title>
+<style>
+:root{--ink:#111;--muted:#777;--line:#e9e9e9;--accent:#d9ff45;--paper:#fafafa}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff}
+header{height:70px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:5}
+.logo{font-size:27px;font-weight:900;letter-spacing:3px}.logo span{color:#777}
+nav{display:flex;gap:24px;font-size:13px}nav a{color:#111;text-decoration:none}
+.cart{border:1px solid #111;background:#111;color:#fff;padding:11px 16px;border-radius:30px;cursor:pointer}
+.hero{margin:22px auto 55px;width:88%;min-height:390px;background:#151515;color:#fff;border-radius:5px;display:flex;align-items:center;padding:7%;position:relative;overflow:hidden}
+.hero:after{content:"V";font-size:440px;font-weight:900;position:absolute;right:5%;top:-85px;color:#252525;line-height:1}
+.hero-content{position:relative;z-index:1;max-width:480px}.eyebrow{font-size:11px;letter-spacing:4px;color:var(--accent);font-weight:bold}
+h1{font-size:clamp(42px,7vw,76px);line-height:.95;margin:18px 0}.hero p{color:#ccc;line-height:1.6;max-width:370px}
+.cta{display:inline-block;margin-top:15px;background:var(--accent);color:#111;padding:14px 22px;text-decoration:none;font-size:12px;font-weight:bold;letter-spacing:1px;border:0;cursor:pointer}
+section{width:88%;margin:0 auto 65px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:22px}.section-head h2{font-size:28px;margin:0}.section-head p{color:var(--muted);font-size:13px;margin:0}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.product{border:1px solid var(--line);padding:12px}.photo{height:245px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover}.photo .placeholder{font-size:12px;color:#999;letter-spacing:2px}
+.product h3{font-size:15px;margin:14px 0 6px}.product p{font-size:12px;color:var(--muted);margin:0 0 12px}.price-row{display:flex;justify-content:space-between;align-items:center}.price{font-weight:bold}.add{background:#111;color:white;border:0;padding:10px 13px;cursor:pointer;font-size:11px}
+.promise{background:var(--paper);padding:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:15px;text-align:center}.promise strong{font-size:13px}.promise p{font-size:11px;color:var(--muted)}
+footer{background:#111;color:#fff;padding:35px 6%;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}footer p{color:#aaa;font-size:12px}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:10;align-items:center;justify-content:center;padding:16px}.modal.show{display:flex}.panel{background:white;width:min(560px,100%);max-height:90vh;overflow:auto;padding:25px;border-radius:6px}.panel-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:none;font-size:25px;cursor:pointer}
+.field{margin:12px 0}.field label{display:block;font-size:11px;font-weight:bold;margin-bottom:6px}.field input,.field textarea{width:100%;padding:12px;border:1px solid #ddd;font:inherit;font-size:14px}.field textarea{min-height:75px;resize:vertical}.summary{background:#f6f6f6;padding:14px;margin:16px 0;font-size:13px;line-height:1.8}.note{font-size:11px;color:#777;line-height:1.5}
+#qrPreview{width:170px;height:170px;object-fit:contain;border:1px dashed #bbb;padding:8px;display:none;margin:10px auto}
+@media(max-width:700px){nav{display:none}.hero{min-height:340px;width:92%}section{width:92%}.products{grid-template-columns:repeat(2,1fr);gap:10px}.photo{height:180px}.promise{grid-template-columns:1fr}.section-head p{display:none}}
+@media(max-width:420px){.products{grid-template-columns:1fr 1fr}.photo{height:145px}.product{padding:8px}.hero:after{right:-25%;opacity:.7}}
+</style>
+</head>
+<body>
+<header><div class="logo">VYRO<span>.</span></div><nav><a href="#shop">SHOP</a><a href="#about">ABOUT</a><a href="#contact">CONTACT</a></nav><button class="cart" onclick="openCheckout()">BAG (<span id="count">0</span>)</button></header>
+<div class="hero"><div class="hero-content"><div class="eyebrow">NEW SEASON · NEW ENERGY</div><h1>STYLE THAT<br> MOVES YOU.</h1><p>Everyday essentials, standout sneakers and fresh fits. Find your next favourite look at VYRO.</p><a class="cta" href="#shop">SHOP THE COLLECTION</a></div></div>
+<section id="shop"><div class="section-head"><h2>Featured collection</h2><p>Fresh picks for your everyday rotation</p></div><div class="products" id="products"></div></section>
+<section id="about" class="promise"><div><strong>MADE FOR EVERYDAY</strong><p>Easy-to-style fashion and footwear.</p></div><div><strong>DELIVERY ACROSS INDIA</strong><p>Shipping details shown at checkout.</p></div><div><strong>SECURE ORDER PROCESS</strong><p>Payment confirmation is checked before dispatch.</p></div></section>
+<footer id="contact"><div><div class="logo">VYRO.</div><p>Fashion for your everyday.</p></div><div><strong>Customer support</strong><p>Add your support email and phone number here.</p></div><div><strong>Policies</strong><p>Shipping · Returns · Privacy</p></div></footer>
+<div class="modal" id="checkout"><div class="panel"><div class="panel-head"><h2 style="margin:0">Checkout</h2><button class="close" onclick="closeCheckout()">×</button></div><div id="summary" class="summary">Your bag is empty.</div>
+<form onsubmit="placeOrder(event)"><div class="field"><label>FULL NAME</label><input id="name" required placeholder="Your name"></div><div class="field"><label>MOBILE NUMBER</label><input id="phone" required inputmode="numeric" pattern="[0-9]{10}" placeholder="10-digit mobile number"></div><div class="field"><label>DELIVERY ADDRESS</label><textarea id="address" required placeholder="House, street, area, city, state, PIN code"></textarea></div>
+<div class="summary"><strong>PAYMENT</strong><p style="margin:7px 0">Business UPI QR will be displayed here after the store owner adds it.</p><input type="file" id="qrFile" accept="image/*" onchange="previewQR(event)"><img id="qrPreview" alt="Business UPI QR preview"><p class="note">Demo checkout only. This page does not collect or verify payments. Confirm any payment directly in your bank or UPI app before accepting an order.</p></div>
+<button class="cta" style="width:100%" type="submit">PLACE DEMO ORDER</button></form><p id="result" class="note"></p></div></div>
+<script>
+const items=[
+ {name:"Everyday Street Sneakers",desc:"Clean look · Everyday comfort",price:1499,img:""},
+ {name:"Classic Oversized Tee",desc:"Relaxed fit · Soft feel",price:699,img:""},
+ {name:"Urban Casual Hoodie",desc:"Layer-ready · Minimal style",price:1299,img:""},
+ {name:"Daily Wear Trainers",desc:"Lightweight · Versatile",price:1799,img:""},
+ {name:"Essential Cargo Pants",desc:"Utility style · Easy fit",price:999,img:""},
+ {name:"VYRO Core T-Shirt",desc:"A wardrobe essential",price:599,img:""}
+];
+let cart=[];
+const money=n=>"₹"+n.toLocaleString("en-IN");
+function render(){document.getElementById("products").innerHTML=items.map((p,i)=>`<article class="product"><div class="photo"><div class="placeholder">VYRO COLLECTION</div></div><h3>${p.name}</h3><p>${p.desc}</p><div class="price-row"><span class="price">${money(p.price)}</span><button class="add" onclick="add(${i})">ADD TO BAG</button></div></article>`).join("");document.getElementById("count").textContent=cart.reduce((s,x)=>s+x.qty,0)}
+function add(i){let found=cart.find(x=>x.i===i);if(found)found.qty++;else cart.push({i,qty:1});render();document.querySelector(".cart").textContent=`BAG (${cart.reduce((s,x)=>s+x.qty,0)})`}
+function openCheckout(){document.getElementById("checkout").classList.add("show");updateSummary()}
+function closeCheckout(){document.getElementById("checkout").classList.remove("show")}
+function updateSummary(){let total=cart.reduce((s,x)=>s+items[x.i].price*x.qty,0);document.getElementById("summary").innerHTML=cart.length?cart.map(x=>`${items[x.i].name} × ${x.qty} — ${money(items[x.i].price*x.qty)}`).join("<br>")+`<hr><strong>Total: ${money(total)}</strong>`:"Your bag is empty. Add a product first."}
+function previewQR(e){const f=e.target.files[0];if(!f)return;const img=document.getElementById("qrPreview");img.src=URL.createObjectURL(f);img.style.display="block"}
+function placeOrder(e){e.preventDefault();if(!cart.length){document.getElementById("result").textContent="Your bag is empty. Add a product first.";return}const total=cart.reduce((s,x)=>s+items[x.i].price*x.qty,0);document.getElementById("result").textContent=`Demo order prepared for ${document.getElementById("name").value}. Total: ${money(total)}. No payment was taken and no order was sent to a store.`}
+render();
+</script>
+</body></html>
